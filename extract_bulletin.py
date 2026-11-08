@@ -1,21 +1,3 @@
-"""Extract tables from a bulletin or census PDF for review.
-
-Usage:
-    python extract_bulletin.py path/to/bulletin.pdf --pages 40-42 --out ../data/raw/extract_2019.csv
-
-What it does:
-  - opens the PDF with pdfplumber
-  - reads every table on the pages you name
-  - writes all tables to one CSV, with a column recording the page and table number
-
-What it does NOT do:
-  - it does not map columns to NeuroX fields. Layouts differ between editions, so you
-    review the output, then write the final district_year_raw.csv and age_sex_raw.csv by hand
-    (or with a short script for that edition).
-  - it does not reconcile figures. build_dataset.py does that, using the published totals.
-
-Record the PDF's URL, edition and download date in data/raw/source_manifest.csv.
-"""
 import argparse
 from pathlib import Path
 
