@@ -1,0 +1,3 @@
+source_name,edition,file_name,downloaded_on,is_synthetic
+SYNTHETIC demo: district service table (replace with real extraction),demo-2016-2023,district_year_raw.csv,2026-11-02,1
+SYNTHETIC demo: age and sex table (replace with real extraction),demo-2016-2023,age_sex_raw.csv,2026-11-02,1
