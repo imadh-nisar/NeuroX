@@ -1,0 +1,778 @@
+{
+  "meta": {
+    "generated_at": "2026-11-10T09:08:30+00:00",
+    "is_synthetic": false,
+    "source_year": 2024,
+    "directory_year": 2023,
+    "national": {
+      "population": 21782000,
+      "psych_clinic_visits": 1250232,
+      "psychiatrists": 101,
+      "psych_beds": 3194,
+      "mental_hospitalisations": 61397,
+      "psychiatrists_per_100k": 0.464,
+      "median_service_use": 46.0
+    },
+    "index_weights": {
+      "psych_visits_per_100k": 0.5,
+      "mh_hosp_per_100k": 0.5
+    },
+    "index_method": "The service-use score combines two 2024 indicators per 100,000 people: psychiatric clinic visits and admissions for mental disorders. Each is scaled from 0 to 1 across the 25 districts, averaged with equal weight, and rescaled to 0 to 100. It measures how much care is used, not how much illness exists.",
+    "decision_rules": {
+      "staff": {
+        "label": "Add psychiatrist time",
+        "reason": "Service use is at or above the median, and psychiatrists per 100,000 people are below the national rate."
+      },
+      "watch": {
+        "label": "Monitor workload",
+        "reason": "Service use is at or above the median, and psychiatrists per 100,000 people are at or above the national rate."
+      },
+      "access": {
+        "label": "Check access",
+        "reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+      },
+      "maintain": {
+        "label": "Keep current plan",
+        "reason": "Service use is below the median, and psychiatrists per 100,000 people are at or above the national rate."
+      },
+      "data": {
+        "label": "Data incomplete",
+        "reason": "A figure needed for this decision is missing from the source tables."
+      }
+    },
+    "reconciliation": [
+      {
+        "check": "Population, all districts (persons)",
+        "computed": 21782000.0,
+        "published": 21781800.0,
+        "status": "match",
+        "note": ""
+      },
+      {
+        "check": "Psychiatric clinic visits, all divisions",
+        "computed": 1250232.0,
+        "published": 1250232.0,
+        "status": "match",
+        "note": ""
+      },
+      {
+        "check": "Psychiatrists, all divisions",
+        "computed": 101.0,
+        "published": 101.0,
+        "status": "match",
+        "note": ""
+      },
+      {
+        "check": "Admissions for mental disorders, all divisions",
+        "computed": 61397.0,
+        "published": 61397.0,
+        "status": "match",
+        "note": ""
+      },
+      {
+        "check": "Psychiatric beds, all divisions",
+        "computed": 3157.0,
+        "published": 3194.0,
+        "status": "partial",
+        "note": "37 beds are not split by division for: Kilinochchi, Mannar, Mullaitivu."
+      }
+    ],
+    "national_context": [
+      {
+        "label": "Psychiatric clinic visits, 2024",
+        "value": 1250232,
+        "year": "2024",
+        "source": "Annual Health Bulletin 2024, Table 9.4",
+        "note": "Table 9.3 prints 1,241,626 for the same year. Check the PDF before citing either figure."
+      },
+      {
+        "label": "Psychiatrists, 2024",
+        "value": 101,
+        "year": "2024",
+        "source": "Annual Health Bulletin 2024, Table 6.3",
+        "note": "Counted by health division (RDHS)."
+      },
+      {
+        "label": "Psychiatric beds, 2024",
+        "value": 3194,
+        "year": "2024",
+        "source": "Annual Health Bulletin 2024, Table 5.3",
+        "note": "Kilinochchi, Mannar and Mullaitivu are not split by division in the source."
+      },
+      {
+        "label": "Admissions for mental disorders, 2024",
+        "value": 61397,
+        "year": "2024",
+        "source": "Annual Health Bulletin 2024, Table 8.9",
+        "note": "Government hospitals only."
+      },
+      {
+        "label": "Psychiatric clinic visits, 2021",
+        "value": 800356,
+        "year": "2021",
+        "source": "Annual Health Bulletin 2024, Table 9.3",
+        "note": "Earlier year, shown for context only."
+      }
+    ],
+    "limitations": [
+      "District figures come from health divisions (RDHS). Kalmunai is counted within Ampara district.",
+      "Colombo's clinic visits, beds and admissions include national institutions whose patients come from across the country.",
+      "Psychiatrist counts are by division. Psychiatrists attached to teaching hospitals may be counted elsewhere, so some districts may look thinner than they are.",
+      "Clinics are often run by medical officers, not psychiatrists. Visits per psychiatrist measures workload, not caseloads.",
+      "Low service use can mean low need or poor access. The score cannot tell these apart.",
+      "Bed counts for Kilinochchi, Mannar and Mullaitivu are not split in the bulletin (37 beds in total).",
+      "Directory counts are government facilities listed with mental health services. They are not staff or bed counts, and the directory is not a complete inventory.",
+      "Patients often travel into a district for care. Vavuniya, for example, has high visits per person because it serves neighbouring districts.",
+      "Some psychiatrist counts look low for the district they are in. Kandy shows 1 psychiatrist despite its teaching hospital. Verify flagged districts against the PDF before acting on them.",
+      "The data covers one year only, so trends cannot be assessed."
+    ],
+    "excluded_indicators": [
+      "Suicide and self-harm indicators are excluded until they are reviewed with a clinician."
+    ]
+  },
+  "districts": [
+    {
+      "id": 1,
+      "name": "Colombo",
+      "province": "Western",
+      "lat": 6.9271,
+      "lon": 79.8612
+    },
+    {
+      "id": 2,
+      "name": "Gampaha",
+      "province": "Western",
+      "lat": 7.0917,
+      "lon": 80.0144
+    },
+    {
+      "id": 3,
+      "name": "Kalutara",
+      "province": "Western",
+      "lat": 6.5854,
+      "lon": 79.9607
+    },
+    {
+      "id": 4,
+      "name": "Kandy",
+      "province": "Central",
+      "lat": 7.2906,
+      "lon": 80.6337
+    },
+    {
+      "id": 5,
+      "name": "Matale",
+      "province": "Central",
+      "lat": 7.4675,
+      "lon": 80.6234
+    },
+    {
+      "id": 6,
+      "name": "Nuwara Eliya",
+      "province": "Central",
+      "lat": 6.9497,
+      "lon": 80.7891
+    },
+    {
+      "id": 7,
+      "name": "Galle",
+      "province": "Southern",
+      "lat": 6.0535,
+      "lon": 80.221
+    },
+    {
+      "id": 8,
+      "name": "Matara",
+      "province": "Southern",
+      "lat": 5.9549,
+      "lon": 80.555
+    },
+    {
+      "id": 9,
+      "name": "Hambantota",
+      "province": "Southern",
+      "lat": 6.1429,
+      "lon": 81.1212
+    },
+    {
+      "id": 10,
+      "name": "Jaffna",
+      "province": "Northern",
+      "lat": 9.6615,
+      "lon": 80.0255
+    },
+    {
+      "id": 11,
+      "name": "Kilinochchi",
+      "province": "Northern",
+      "lat": 9.3803,
+      "lon": 80.377
+    },
+    {
+      "id": 12,
+      "name": "Mannar",
+      "province": "Northern",
+      "lat": 8.981,
+      "lon": 79.9044
+    },
+    {
+      "id": 13,
+      "name": "Vavuniya",
+      "province": "Northern",
+      "lat": 8.7542,
+      "lon": 80.4982
+    },
+    {
+      "id": 14,
+      "name": "Mullaitivu",
+      "province": "Northern",
+      "lat": 9.2671,
+      "lon": 80.8142
+    },
+    {
+      "id": 15,
+      "name": "Batticaloa",
+      "province": "Eastern",
+      "lat": 7.7102,
+      "lon": 81.6924
+    },
+    {
+      "id": 16,
+      "name": "Ampara",
+      "province": "Eastern",
+      "lat": 7.3014,
+      "lon": 81.6747
+    },
+    {
+      "id": 17,
+      "name": "Trincomalee",
+      "province": "Eastern",
+      "lat": 8.5874,
+      "lon": 81.2152
+    },
+    {
+      "id": 18,
+      "name": "Kurunegala",
+      "province": "North Western",
+      "lat": 7.4863,
+      "lon": 80.3647
+    },
+    {
+      "id": 19,
+      "name": "Puttalam",
+      "province": "North Western",
+      "lat": 8.0408,
+      "lon": 79.8394
+    },
+    {
+      "id": 20,
+      "name": "Anuradhapura",
+      "province": "North Central",
+      "lat": 8.3114,
+      "lon": 80.4037
+    },
+    {
+      "id": 21,
+      "name": "Polonnaruwa",
+      "province": "North Central",
+      "lat": 7.9403,
+      "lon": 81.0188
+    },
+    {
+      "id": 22,
+      "name": "Badulla",
+      "province": "Uva",
+      "lat": 6.9934,
+      "lon": 81.055
+    },
+    {
+      "id": 23,
+      "name": "Monaragala",
+      "province": "Uva",
+      "lat": 6.8728,
+      "lon": 81.3507
+    },
+    {
+      "id": 24,
+      "name": "Ratnapura",
+      "province": "Sabaragamuwa",
+      "lat": 6.7056,
+      "lon": 80.3847
+    },
+    {
+      "id": 25,
+      "name": "Kegalle",
+      "province": "Sabaragamuwa",
+      "lat": 7.2513,
+      "lon": 80.3464
+    }
+  ],
+  "district_2024": [
+    {
+      "district_id": 1,
+      "population": 2375000,
+      "psych_clinic_visits": 201229,
+      "psychiatrists": 28,
+      "psych_beds": 1573,
+      "mental_hospitalisations": 10520,
+      "psych_visits_per_100k": 8472.8,
+      "psychiatrists_per_100k": 1.18,
+      "beds_per_100k": 66.23,
+      "mh_hosp_per_100k": 442.95,
+      "visits_per_psychiatrist": 7187.0,
+      "facilities_listed": 28,
+      "service_use_score": 80.2,
+      "decision_key": "watch",
+      "decision_label": "Monitor workload",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 2,
+      "population": 2436000,
+      "psych_clinic_visits": 118878,
+      "psychiatrists": 4,
+      "psych_beds": 222,
+      "mental_hospitalisations": 5539,
+      "psych_visits_per_100k": 4880.05,
+      "psychiatrists_per_100k": 0.16,
+      "beds_per_100k": 9.11,
+      "mh_hosp_per_100k": 227.38,
+      "visits_per_psychiatrist": 29720.0,
+      "facilities_listed": 11,
+      "service_use_score": 32.7,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 3,
+      "population": 1306000,
+      "psych_clinic_visits": 70884,
+      "psychiatrists": 3,
+      "psych_beds": 44,
+      "mental_hospitalisations": 2841,
+      "psych_visits_per_100k": 5427.57,
+      "psychiatrists_per_100k": 0.23,
+      "beds_per_100k": 3.37,
+      "mh_hosp_per_100k": 217.53,
+      "visits_per_psychiatrist": 23628.0,
+      "facilities_listed": 10,
+      "service_use_score": 34.1,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 4,
+      "population": 1462000,
+      "psych_clinic_visits": 91631,
+      "psychiatrists": 1,
+      "psych_beds": 190,
+      "mental_hospitalisations": 5573,
+      "psych_visits_per_100k": 6267.51,
+      "psychiatrists_per_100k": 0.07,
+      "beds_per_100k": 13.0,
+      "mh_hosp_per_100k": 381.19,
+      "visits_per_psychiatrist": 91631.0,
+      "facilities_listed": 28,
+      "service_use_score": 60.8,
+      "decision_key": "staff",
+      "decision_label": "Add psychiatrist time",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are below the national rate."
+    },
+    {
+      "district_id": 5,
+      "population": 527000,
+      "psych_clinic_visits": 48645,
+      "psychiatrists": 14,
+      "psych_beds": 89,
+      "mental_hospitalisations": 1807,
+      "psych_visits_per_100k": 9230.55,
+      "psychiatrists_per_100k": 2.66,
+      "beds_per_100k": 16.89,
+      "mh_hosp_per_100k": 342.88,
+      "visits_per_psychiatrist": 3475.0,
+      "facilities_listed": 12,
+      "service_use_score": 70.2,
+      "decision_key": "watch",
+      "decision_label": "Monitor workload",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 6,
+      "population": 725000,
+      "psych_clinic_visits": 24131,
+      "psychiatrists": 2,
+      "psych_beds": 37,
+      "mental_hospitalisations": 1503,
+      "psych_visits_per_100k": 3328.41,
+      "psychiatrists_per_100k": 0.28,
+      "beds_per_100k": 5.1,
+      "mh_hosp_per_100k": 207.31,
+      "visits_per_psychiatrist": 12066.0,
+      "facilities_listed": 16,
+      "service_use_score": 22.3,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 7,
+      "population": 1097000,
+      "psych_clinic_visits": 58244,
+      "psychiatrists": 3,
+      "psych_beds": 95,
+      "mental_hospitalisations": 3545,
+      "psych_visits_per_100k": 5309.39,
+      "psychiatrists_per_100k": 0.27,
+      "beds_per_100k": 8.66,
+      "mh_hosp_per_100k": 323.15,
+      "visits_per_psychiatrist": 19415.0,
+      "facilities_listed": 31,
+      "service_use_score": 48.0,
+      "decision_key": "staff",
+      "decision_label": "Add psychiatrist time",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are below the national rate."
+    },
+    {
+      "district_id": 8,
+      "population": 838000,
+      "psych_clinic_visits": 48437,
+      "psychiatrists": 5,
+      "psych_beds": 20,
+      "mental_hospitalisations": 1329,
+      "psych_visits_per_100k": 5780.07,
+      "psychiatrists_per_100k": 0.6,
+      "beds_per_100k": 2.39,
+      "mh_hosp_per_100k": 158.59,
+      "visits_per_psychiatrist": 9687.0,
+      "facilities_listed": 17,
+      "service_use_score": 27.8,
+      "decision_key": "maintain",
+      "decision_label": "Keep current plan",
+      "decision_reason": "Service use is below the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 9,
+      "population": 671000,
+      "psych_clinic_visits": 34547,
+      "psychiatrists": 4,
+      "psych_beds": 104,
+      "mental_hospitalisations": 1357,
+      "psych_visits_per_100k": 5148.58,
+      "psychiatrists_per_100k": 0.6,
+      "beds_per_100k": 15.5,
+      "mh_hosp_per_100k": 202.24,
+      "visits_per_psychiatrist": 8637.0,
+      "facilities_listed": 15,
+      "service_use_score": 30.6,
+      "decision_key": "maintain",
+      "decision_label": "Keep current plan",
+      "decision_reason": "Service use is below the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 10,
+      "population": 595000,
+      "psych_clinic_visits": 54337,
+      "psychiatrists": 5,
+      "psych_beds": 90,
+      "mental_hospitalisations": 2167,
+      "psych_visits_per_100k": 9132.27,
+      "psychiatrists_per_100k": 0.84,
+      "beds_per_100k": 15.13,
+      "mh_hosp_per_100k": 364.2,
+      "visits_per_psychiatrist": 10867.0,
+      "facilities_listed": 8,
+      "service_use_score": 72.6,
+      "decision_key": "watch",
+      "decision_label": "Monitor workload",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 11,
+      "population": 124000,
+      "psych_clinic_visits": 7343,
+      "psychiatrists": 4,
+      "psych_beds": null,
+      "mental_hospitalisations": 547,
+      "psych_visits_per_100k": 5921.77,
+      "psychiatrists_per_100k": 3.23,
+      "beds_per_100k": null,
+      "mh_hosp_per_100k": 441.13,
+      "visits_per_psychiatrist": 1836.0,
+      "facilities_listed": 11,
+      "service_use_score": 67.3,
+      "decision_key": "watch",
+      "decision_label": "Monitor workload",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 12,
+      "population": 172000,
+      "psych_clinic_visits": 6953,
+      "psychiatrists": 3,
+      "psych_beds": null,
+      "mental_hospitalisations": 693,
+      "psych_visits_per_100k": 4042.44,
+      "psychiatrists_per_100k": 1.74,
+      "beds_per_100k": null,
+      "mh_hosp_per_100k": 402.91,
+      "visits_per_psychiatrist": 2318.0,
+      "facilities_listed": 8,
+      "service_use_score": 52.7,
+      "decision_key": "watch",
+      "decision_label": "Monitor workload",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 13,
+      "population": 123000,
+      "psych_clinic_visits": 15331,
+      "psychiatrists": 2,
+      "psych_beds": 24,
+      "mental_hospitalisations": 373,
+      "psych_visits_per_100k": 12464.23,
+      "psychiatrists_per_100k": 1.63,
+      "beds_per_100k": 19.51,
+      "mh_hosp_per_100k": 303.25,
+      "visits_per_psychiatrist": 7666.0,
+      "facilities_listed": 5,
+      "service_use_score": 80.8,
+      "decision_key": "watch",
+      "decision_label": "Monitor workload",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 14,
+      "population": 137000,
+      "psych_clinic_visits": 5940,
+      "psychiatrists": 0,
+      "psych_beds": null,
+      "mental_hospitalisations": 542,
+      "psych_visits_per_100k": 4335.77,
+      "psychiatrists_per_100k": 0.0,
+      "beds_per_100k": null,
+      "mh_hosp_per_100k": 395.62,
+      "visits_per_psychiatrist": null,
+      "facilities_listed": 15,
+      "service_use_score": 53.1,
+      "decision_key": "staff",
+      "decision_label": "Add psychiatrist time",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are below the national rate."
+    },
+    {
+      "district_id": 15,
+      "population": 596000,
+      "psych_clinic_visits": 23421,
+      "psychiatrists": 0,
+      "psych_beds": 100,
+      "mental_hospitalisations": 2009,
+      "psych_visits_per_100k": 3929.7,
+      "psychiatrists_per_100k": 0.0,
+      "beds_per_100k": 16.78,
+      "mh_hosp_per_100k": 337.08,
+      "visits_per_psychiatrist": null,
+      "facilities_listed": 15,
+      "service_use_score": 43.1,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 16,
+      "population": 745000,
+      "psych_clinic_visits": 44119,
+      "psychiatrists": 3,
+      "psych_beds": 65,
+      "mental_hospitalisations": 1666,
+      "psych_visits_per_100k": 5922.01,
+      "psychiatrists_per_100k": 0.4,
+      "beds_per_100k": 8.72,
+      "mh_hosp_per_100k": 223.62,
+      "visits_per_psychiatrist": 14706.0,
+      "facilities_listed": 24,
+      "service_use_score": 37.4,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 17,
+      "population": 443000,
+      "psych_clinic_visits": 10606,
+      "psychiatrists": 0,
+      "psych_beds": 30,
+      "mental_hospitalisations": 349,
+      "psych_visits_per_100k": 2394.13,
+      "psychiatrists_per_100k": 0.0,
+      "beds_per_100k": 6.77,
+      "mh_hosp_per_100k": 78.78,
+      "visits_per_psychiatrist": null,
+      "facilities_listed": 15,
+      "service_use_score": 0.0,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 18,
+      "population": 1768000,
+      "psych_clinic_visits": 62257,
+      "psychiatrists": 1,
+      "psych_beds": 87,
+      "mental_hospitalisations": 3858,
+      "psych_visits_per_100k": 3521.32,
+      "psychiatrists_per_100k": 0.06,
+      "beds_per_100k": 4.92,
+      "mh_hosp_per_100k": 218.21,
+      "visits_per_psychiatrist": 62257.0,
+      "facilities_listed": 23,
+      "service_use_score": 24.7,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 19,
+      "population": 819000,
+      "psych_clinic_visits": 41682,
+      "psychiatrists": 1,
+      "psych_beds": 19,
+      "mental_hospitalisations": 1091,
+      "psych_visits_per_100k": 5089.38,
+      "psychiatrists_per_100k": 0.12,
+      "beds_per_100k": 2.32,
+      "mh_hosp_per_100k": 133.21,
+      "visits_per_psychiatrist": 41682.0,
+      "facilities_listed": 17,
+      "service_use_score": 20.9,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 20,
+      "population": 960000,
+      "psych_clinic_visits": 27905,
+      "psychiatrists": 5,
+      "psych_beds": 112,
+      "mental_hospitalisations": 3796,
+      "psych_visits_per_100k": 2906.77,
+      "psychiatrists_per_100k": 0.52,
+      "beds_per_100k": 11.67,
+      "mh_hosp_per_100k": 395.42,
+      "visits_per_psychiatrist": 5581.0,
+      "facilities_listed": 14,
+      "service_use_score": 46.0,
+      "decision_key": "watch",
+      "decision_label": "Monitor workload",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are at or above the national rate."
+    },
+    {
+      "district_id": 21,
+      "population": 448000,
+      "psych_clinic_visits": 30654,
+      "psychiatrists": 2,
+      "psych_beds": 38,
+      "mental_hospitalisations": 1204,
+      "psych_visits_per_100k": 6842.41,
+      "psychiatrists_per_100k": 0.45,
+      "beds_per_100k": 8.48,
+      "mh_hosp_per_100k": 268.75,
+      "visits_per_psychiatrist": 15327.0,
+      "facilities_listed": 8,
+      "service_use_score": 48.2,
+      "decision_key": "staff",
+      "decision_label": "Add psychiatrist time",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are below the national rate."
+    },
+    {
+      "district_id": 22,
+      "population": 872000,
+      "psych_clinic_visits": 57880,
+      "psychiatrists": 4,
+      "psych_beds": 73,
+      "mental_hospitalisations": 2481,
+      "psych_visits_per_100k": 6637.61,
+      "psychiatrists_per_100k": 0.46,
+      "beds_per_100k": 8.37,
+      "mh_hosp_per_100k": 284.52,
+      "visits_per_psychiatrist": 14470.0,
+      "facilities_listed": 18,
+      "service_use_score": 49.3,
+      "decision_key": "staff",
+      "decision_label": "Add psychiatrist time",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are below the national rate."
+    },
+    {
+      "district_id": 23,
+      "population": 528000,
+      "psych_clinic_visits": 21697,
+      "psychiatrists": 2,
+      "psych_beds": 26,
+      "mental_hospitalisations": 1443,
+      "psych_visits_per_100k": 4109.28,
+      "psychiatrists_per_100k": 0.38,
+      "beds_per_100k": 4.92,
+      "mh_hosp_per_100k": 273.3,
+      "visits_per_psychiatrist": 10848.0,
+      "facilities_listed": 17,
+      "service_use_score": 35.2,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 24,
+      "population": 1145000,
+      "psych_clinic_visits": 78902,
+      "psychiatrists": 4,
+      "psych_beds": 51,
+      "mental_hospitalisations": 2858,
+      "psych_visits_per_100k": 6891.0,
+      "psychiatrists_per_100k": 0.35,
+      "beds_per_100k": 4.45,
+      "mh_hosp_per_100k": 249.61,
+      "visits_per_psychiatrist": 19726.0,
+      "facilities_listed": 16,
+      "service_use_score": 45.8,
+      "decision_key": "access",
+      "decision_label": "Check access",
+      "decision_reason": "Service use is below the median and psychiatrists per 100,000 people are below the national rate. Low use can reflect barriers to access."
+    },
+    {
+      "district_id": 25,
+      "population": 870000,
+      "psych_clinic_visits": 64579,
+      "psychiatrists": 1,
+      "psych_beds": 68,
+      "mental_hospitalisations": 2306,
+      "psych_visits_per_100k": 7422.87,
+      "psychiatrists_per_100k": 0.11,
+      "beds_per_100k": 7.82,
+      "mh_hosp_per_100k": 265.06,
+      "visits_per_psychiatrist": 64579.0,
+      "facilities_listed": 14,
+      "service_use_score": 50.5,
+      "decision_key": "staff",
+      "decision_label": "Add psychiatrist time",
+      "decision_reason": "Service use is at or above the median, and psychiatrists per 100,000 people are below the national rate."
+    }
+  ],
+  "sources": [
+    {
+      "source_name": "Annual Health Bulletin 2024, Ministry of Health and Mass Media (Medical Statistics Unit). Tables 2.1, 5.3, 6.3, 8.9, 9.3, 9.4",
+      "edition": "2024",
+      "file_name": "Annual_Health_Bulletin_2024.pdf",
+      "downloaded_on": null,
+      "is_synthetic": 0
+    },
+    {
+      "source_name": "Directory of Mental Health Service Providers in Sri Lanka 2023, Directorate of Mental Health. Section 1, Government Hospitals",
+      "edition": "2023",
+      "file_name": "Directory_Mental_Health_Service_Providers_2023.pdf",
+      "downloaded_on": null,
+      "is_synthetic": 0
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+# dependencies and builds
+node_modules/
+react-app/client/dist/
+__pycache__/
+*.pyc
+# secrets: never commit database passwords
+.env
+*.env.local
+# generated data is rebuilt by the pipeline; keep the raw transcriptions
+data/processed/
