@@ -380,3 +380,14 @@ table.data td:nth-child(n+3) { text-align: left; }
   .hero-glow, .hero-title, .hero-sub, .insight-card, .search-results { animation: none !important; }
   .leader-fill, .stat-card, .insight-card, .leader-row { transition: none !important; }
 }
+
+/* 2024 release additions */
+.flag-access { background: rgba(122,167,255,.18); color: #b9cfff; }
+.priority-access { border-top-color: #7aa7ff; }
+.metrics small { display: block; color: var(--muted); font-size: .78rem; margin-top: .2rem; }
+.decision-card { background: var(--surface-2); border-radius: 12px; padding: .8rem .9rem; margin: .6rem 0; }
+.decision-card p { margin: .45rem 0 0; color: var(--muted); }
+.check-match { color: var(--accent); font-weight: 700; }
+.check-partial { color: var(--warn); font-weight: 700; }
+.check-check { color: var(--danger); font-weight: 700; }
+.badge { background: rgba(61,220,151,.12); color: var(--accent); border: 1px solid rgba(61,220,151,.4); }

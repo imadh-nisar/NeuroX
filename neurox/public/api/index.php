@@ -1,15 +1,12 @@
 <?php
 /**
- * NeuroX JSON API (read-only, aggregated data only).
+ * NeuroX JSON API (read-only, aggregated district figures).
  *
- *   GET api/index.php?action=all              full dataset used by the dashboard
- *   GET api/index.php?action=meta             settings: weights, thresholds, demo flag
- *   GET api/index.php?action=districts        districts with coordinates
- *   GET api/index.php?action=district_year    yearly indicators   (optional: district_id)
- *   GET api/index.php?action=age_sex          age and sex cells   (optional: district_id)
- *   GET api/index.php?action=alerts           rising-need alerts
- *
- * Suppressed age-sex cells have visits = null. Nothing else in this API identifies a person.
+ *   GET api/index.php?action=all               full dataset used by the dashboard
+ *   GET api/index.php?action=meta              settings and national figures
+ *   GET api/index.php?action=districts         districts with coordinates
+ *   GET api/index.php?action=district_2024     2024 figures (optional: district_id=)
+ *   GET api/index.php?action=sources           sources and dates
  */
 declare(strict_types=1);
 
@@ -24,10 +21,7 @@ function respond(array $body, int $status = 200): void
     exit;
 }
 
-/**
- * Converts column values to PHP types so the JSON matches the dataset.json file.
- * DECIMAL columns come back from PDO as strings, so they are cast here.
- */
+/** Casts column values to PHP types so the JSON matches dataset.json. */
 function cast_rows(array $rows, array $types): array
 {
     foreach ($rows as &$row) {
@@ -49,21 +43,12 @@ function cast_rows(array $rows, array $types): array
 
 const DISTRICT_TYPES = ['id' => 'int', 'lat' => 'float', 'lon' => 'float'];
 
-const DISTRICT_YEAR_TYPES = [
-    'district_id' => 'int', 'year' => 'int', 'outpatient_visits' => 'int', 'admissions' => 'int',
-    'referrals' => 'int', 'population' => 'int', 'unemployment_pct' => 'float', 'psychiatrists' => 'int',
-    'completeness_pct' => 'float', 'out_rate' => 'float', 'adm_rate' => 'float', 'ref_rate' => 'float',
-    'psych_per_100k' => 'float', 'visits_per_psychiatrist' => 'float', 'need_index' => 'float',
-];
-
-const AGE_SEX_TYPES = [
-    'district_id' => 'int', 'year' => 'int', 'visits' => 'int', 'population' => 'int',
-    'suppressed' => 'bool', 'rate_per_100k' => 'float',
-];
-
-const ALERT_TYPES = [
-    'district_id' => 'int', 'first_year' => 'int', 'last_year' => 'int',
-    'latest_index' => 'float', 'staffing_changed' => 'bool',
+const DISTRICT_2024_TYPES = [
+    'district_id' => 'int', 'population' => 'int', 'psych_clinic_visits' => 'int',
+    'psychiatrists' => 'int', 'psych_beds' => 'int', 'mental_hospitalisations' => 'int',
+    'psych_visits_per_100k' => 'float', 'psychiatrists_per_100k' => 'float', 'beds_per_100k' => 'float',
+    'mh_hosp_per_100k' => 'float', 'visits_per_psychiatrist' => 'float', 'facilities_listed' => 'int',
+    'service_use_score' => 'float',
 ];
 
 const SOURCE_TYPES = ['is_synthetic' => 'bool'];
@@ -82,10 +67,8 @@ try {
         ]
     );
 
-    $query = static function (string $sql, array $params = []) use ($pdo): array {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll();
+    $query = static function (string $sql) use ($pdo): array {
+        return $pdo->query($sql)->fetchAll();
     };
 
     $metaRows = $query("SELECT setting_value FROM settings WHERE setting_key = 'meta'");
@@ -95,31 +78,16 @@ try {
         $query('SELECT id, name, province, lat, lon FROM districts ORDER BY id'),
         DISTRICT_TYPES
     );
-    $districtYear = cast_rows(
+    $district2024 = cast_rows(
         $query(
-            'SELECT district_id, year, outpatient_visits, admissions, referrals, population,
-                    unemployment_pct, psychiatrists, completeness_pct, out_rate, adm_rate, ref_rate,
-                    psych_per_100k, visits_per_psychiatrist, need_index
-               FROM district_year
-              ORDER BY district_id, year'
+            'SELECT district_id, population, psych_clinic_visits, psychiatrists, psych_beds,
+                    mental_hospitalisations, psych_visits_per_100k, psychiatrists_per_100k, beds_per_100k,
+                    mh_hosp_per_100k, visits_per_psychiatrist, facilities_listed, service_use_score,
+                    decision_key, decision_label, decision_reason
+               FROM district_2024
+              ORDER BY district_id'
         ),
-        DISTRICT_YEAR_TYPES
-    );
-    $ageSex = cast_rows(
-        $query(
-            'SELECT district_id, year, age_group, sex, visits, population, suppressed, rate_per_100k
-               FROM age_sex_year
-              ORDER BY district_id, year, age_group, sex'
-        ),
-        AGE_SEX_TYPES
-    );
-    $alerts = cast_rows(
-        $query(
-            'SELECT district_id, first_year, last_year, latest_index, staffing_changed, message
-               FROM alerts
-              ORDER BY latest_index DESC'
-        ),
-        ALERT_TYPES
+        DISTRICT_2024_TYPES
     );
     $sources = cast_rows(
         $query('SELECT source_name, edition, file_name, downloaded_on, is_synthetic FROM source_files ORDER BY id'),
@@ -138,14 +106,7 @@ try {
 
     switch ($action) {
         case 'all':
-            respond([
-                'meta' => $meta,
-                'districts' => $districts,
-                'district_year' => $districtYear,
-                'age_sex' => $ageSex,
-                'alerts' => $alerts,
-                'sources' => $sources,
-            ]);
+            respond(['meta' => $meta, 'districts' => $districts, 'district_2024' => $district2024, 'sources' => $sources]);
             break;
         case 'meta':
             respond(['meta' => $meta]);
@@ -153,14 +114,11 @@ try {
         case 'districts':
             respond(['districts' => $districts]);
             break;
-        case 'district_year':
-            respond(['district_year' => $filterDistrict($districtYear)]);
+        case 'district_2024':
+            respond(['district_2024' => $filterDistrict($district2024)]);
             break;
-        case 'age_sex':
-            respond(['age_sex' => $filterDistrict($ageSex)]);
-            break;
-        case 'alerts':
-            respond(['alerts' => $alerts]);
+        case 'sources':
+            respond(['sources' => $sources]);
             break;
         default:
             respond(['error' => 'Unknown action.'], 400);
