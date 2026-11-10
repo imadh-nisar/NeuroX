@@ -1,0 +1,19 @@
+{
+  "name": "neurox-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NeuroX API: Express and MariaDB, with dataset.json fallback",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.11.5"
+  }
+}

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NeuroX · Mental health need across Sri Lanka</title>
+  <meta name="description" content="Planning and awareness dashboard for district-level mental health need and psychiatric capacity. Not for diagnosis.">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">NX</span>
+      <div>
+        <h1>NeuroX</h1>
+        <p class="tagline">Mapping mental health need across Sri Lanka</p>
+      </div>
+    </div>
+    <div class="top-controls">
+      <span id="sourceBadge" class="badge badge-warn" hidden>Demo data · synthetic</span>
+      <label class="year-select">
+        <span>Year</span>
+        <select id="yearSelect" aria-describedby="yearHelp"></select>
+      </label>
+      <button id="printBtn" class="btn ghost" type="button">Print or save as PDF</button>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Dashboard views" role="tablist">
+    <button class="tab" role="tab" id="tab-map" data-tab="map" aria-controls="view-map" aria-selected="true">Map</button>
+    <button class="tab" role="tab" id="tab-trends" data-tab="trends" aria-controls="view-trends" aria-selected="false" tabindex="-1">Trends</button>
+    <button class="tab" role="tab" id="tab-priorities" data-tab="priorities" aria-controls="view-priorities" aria-selected="false" tabindex="-1">Priorities</button>
+    <button class="tab" role="tab" id="tab-coverage" data-tab="coverage" aria-controls="view-coverage" aria-selected="false" tabindex="-1">Capacity</button>
+    <button class="tab" role="tab" id="tab-alerts" data-tab="alerts" aria-controls="view-alerts" aria-selected="false" tabindex="-1">Alerts</button>
+    <button class="tab" role="tab" id="tab-method" data-tab="method" aria-controls="view-method" aria-selected="false" tabindex="-1">Method and data</button>
+  </nav>
+
+  <div class="notice" role="note">
+    <p>
+      <strong>Planning tool, not a diagnosis.</strong>
+      It shows district totals and rates, never individual people. Use it to decide where to look first, then check the source figures.
+    </p>
+    <p class="helpline">
+      Someone needs to talk now? National Mental Health Helpline <a href="tel:1926">1926</a>.
+      Emergency: <a href="tel:119">119</a>.
+    </p>
+  </div>
+
+  <main id="main">
+    <button id="toTop" class="to-top" type="button" aria-label="Back to top" tabindex="-1">↑</button>
+    <div id="loadError" class="error" role="alert" hidden></div>
+    <p id="yearHelp" class="sr-only">Choose the year shown on the map, coverage and simulator.</p>
+
+    <!-- MAP -->
+    <section id="view-map" class="view active" role="tabpanel" aria-labelledby="tab-map">
+      <div class="toolbar">
+        <div class="time-control">
+          <button id="playBtn" class="btn" type="button" aria-label="Play through the years">Play</button>
+          <label class="slider-label">
+            <span>Year <output id="yearLabel" for="yearSlider"></output></span>
+            <input id="yearSlider" type="range" min="0" max="0" step="1" value="0">
+          </label>
+        </div>
+        <label class="district-pick">
+          <span>District</span>
+          <select id="districtPick"></select>
+        </label>
+      </div>
+      <div id="legend" class="legend" aria-label="Colour key for need index"></div>
+      <div class="map-layout">
+        <div id="map" class="map" role="region" aria-label="Map of districts coloured by need index"></div>
+        <aside id="panel" class="panel" aria-live="polite"></aside>
+      </div>
+      <p class="fine">
+        Circles sit at approximate district centres and are sized by population. Official boundary
+        polygons are not yet included (see Method). Dashed outlines mean reporting is below the completeness threshold.
+      </p>
+    </section>
+
+    <!-- TRENDS -->
+    <section id="view-trends" class="view" role="tabpanel" aria-labelledby="tab-trends">
+      <div class="card">
+        <h2>Need over time</h2>
+        <p class="muted">Compare up to three districts. The need index runs from 0 to 100 across all districts and years.</p>
+        <div id="trendChips" class="chips" role="group" aria-label="Choose up to three districts to compare"></div>
+        <p id="trendNote" class="note" aria-live="polite"></p>
+        <div class="chart-box"><canvas id="trendChart" role="img" aria-label="Line chart of need index over time for the selected districts"></canvas></div>
+        <div class="table-wrap"><table id="trendTable" class="data"></table></div>
+      </div>
+
+      <div class="card">
+        <h2>Age and sex breakdown</h2>
+        <p class="muted">Cells with fewer than the minimum number of visits are hidden, so small numbers are never shown.</p>
+        <div class="controls">
+          <label>District <select id="ageDistrict"></select></label>
+          <label>Year <select id="ageYear"></select></label>
+        </div>
+        <p id="ageNote" class="note" aria-live="polite"></p>
+        <div class="grid-2">
+          <div>
+            <h3>Visits by age and sex</h3>
+            <div class="chart-box"><canvas id="ageBarChart" role="img" aria-label="Bar chart of visits by age group and sex"></canvas></div>
+          </div>
+          <div>
+            <h3>Rate per 100,000 by age group</h3>
+            <div class="chart-box"><canvas id="ageRateChart" role="img" aria-label="Line chart of rate per 100,000 by age group over time"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIORITIES -->
+    <section id="view-priorities" class="view" role="tabpanel" aria-labelledby="tab-priorities">
+      <div class="card">
+        <h2>Where to act first</h2>
+        <p class="muted">Each district is placed in one group using simple, visible rules. Use these groups to decide where to look first. The final decision stays with the planner and the clinical team.</p>
+        <div class="priority-grid" id="priorityCounts"></div>
+        <div class="card-head" style="margin-top:1rem">
+          <p class="fine" style="margin:0">Rules: "above the middle" means above the national median for that year.</p>
+          <button id="priorityExport" class="btn ghost" type="button">Download priorities (CSV)</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="table-wrap"><table class="data">
+          <thead><tr><th scope="col">District</th><th scope="col">Suggested focus</th><th scope="col">Why</th><th scope="col">Need score</th><th scope="col">Visits per psychiatrist</th></tr></thead>
+          <tbody id="priorityBody"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <!-- COVERAGE -->
+    <section id="view-coverage" class="view" role="tabpanel" aria-labelledby="tab-coverage">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Capacity: need against psychiatrists</h2>
+            <p class="muted">Outpatient visits per psychiatrist for the selected year. Flags compare each district with the national median.</p>
+          </div>
+          <div class="controls">
+            <label>Sort by
+              <select id="covSort">
+                <option value="vpp">Visits per psychiatrist</option>
+                <option value="index">Need index</option>
+                <option value="name">Name</option>
+              </select>
+            </label>
+            <button id="covExport" class="btn ghost" type="button">Download table (CSV)</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th scope="col">District</th>
+                <th scope="col">Province</th>
+                <th scope="col">Psychiatrists</th>
+                <th scope="col">Per 100,000</th>
+                <th scope="col">Outpatient visits</th>
+                <th scope="col">Visits per psychiatrist</th>
+                <th scope="col">Need index</th>
+                <th scope="col">Flag</th>
+              </tr>
+            </thead>
+            <tbody id="covBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2>Load per psychiatrist</h2>
+          <p class="muted">Red bars mark high need with above-median load.</p>
+          <div class="chart-tall"><canvas id="covChart" role="img" aria-label="Horizontal bar chart of outpatient visits per psychiatrist by district"></canvas></div>
+        </div>
+        <div class="card">
+          <h2>Staffing simulator</h2>
+          <p class="muted">
+            Move psychiatrist posts from one district to another for the selected year.
+            Visit volumes are held constant, so this shows staffing ratios only, not clinical outcomes.
+          </p>
+          <div class="controls stack">
+            <label>From <select id="simFrom"></select></label>
+            <label>To <select id="simTo"></select></label>
+            <label class="slider-label">
+              <span>Posts moved: <output id="simFteOut">1</output></span>
+              <input id="simFte" type="range" min="0" max="5" step="1" value="1">
+            </label>
+          </div>
+          <div id="simResult" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERTS -->
+    <section id="view-alerts" class="view" role="tabpanel" aria-labelledby="tab-alerts">
+      <div class="card">
+        <h2>Rising need</h2>
+        <p id="alertRule" class="muted"></p>
+        <div id="alertList" class="alert-list"></div>
+        <p class="fine">
+          Alerts are rule-based, not forecasts. Check each one against the source bulletin before acting on it.
+        </p>
+      </div>
+    </section>
+
+    <!-- METHOD -->
+    <section id="view-method" class="view" role="tabpanel" aria-labelledby="tab-method">
+      <div class="card prose">
+        <h2>How the figures are made</h2>
+        <p id="methodIndex"></p>
+        <h3>Index weights</h3>
+        <ul id="methodWeights" class="plain-list"></ul>
+        <h3>National figures from public sources</h3>
+        <p class="fine">Whole-country numbers from public documents, for context only. They are not district data.</p>
+        <div class="table-wrap"><table class="data" id="methodNational"></table></div>
+        <h3>Thresholds and suppression</h3>
+        <p id="methodThresholds"></p>
+        <h3>What the dashboard does not show</h3>
+        <p id="methodExcluded"></p>
+        <h3>Limits of the data</h3>
+        <ul class="plain-list">
+          <li>Under-reporting in rural clinics can make need look lower than it is. Reporting completeness is shown beside each index value.</li>
+          <li>Years and districts with no reported data are shown as a gap, never filled with an estimate.</li>
+          <li>Districts are placed at approximate centres. Official boundaries need a licensed GeoJSON file.</li>
+          <li>Alerts depend on a short history, so they are prompts to check the source, not conclusions.</li>
+        </ul>
+        <h3>Sources</h3>
+        <div class="table-wrap"><table class="data" id="methodSources"></table></div>
+        <h3>Helplines</h3>
+        <p>National Mental Health Helpline: <a href="tel:1926">1926</a>. Emergency: <a href="tel:119">119</a>. Please check these numbers before any public launch.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>NeuroX · ModelX 2.0 Phase 1 prototype · <span id="dataStatus">Loading data…</span></p>
+    <p>Planning and awareness only. Not for diagnosis or treatment.</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
